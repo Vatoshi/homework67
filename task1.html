@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        <input id="add-item-btn" type="button" value="+">
+    </div>
+    <script>
+        let a = document.getElementById("container")
+        a.onclick = function() {
+            notification();
+        }
+
+        function notification () {
+           const notif = document.createElement("div")
+           notif.textContent = "уведомление с любым текстом"; 
+           const btn = document.createElement("button")
+           btn.textContent = "Закрыть";
+           notif.appendChild(btn)
+           a.appendChild(notif)
+           
+           let timeoutId = setTimeout(() => notif.remove(), 3000);
+
+           btn.onclick = function() {
+            event.stopPropagation();
+            clearTimeout(timeoutId);
+            closeNotif(notif);
+           }           
+        }
+
+        function closeNotif(notif) {
+            notif.remove();
+        }
+    </script>
+</body>
+</html>
