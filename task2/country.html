@@ -57,13 +57,44 @@
         const name = data.name.common;
         const capital = data.capital ? data.capital[0] : 'Нет данных';
         const currencies = data.currencies ? Object.keys(data.currencies).join(', ') : 'Нет данных';
-        const borders = data.borders ? data.borders.join(', ') : 'Нет данных';
+        const borders = data.borders;
+        console.log(borders);
+        
+
+        const bordersFull = [];
+
+        if (borders && borders.length > 0) {
+        borders.forEach(code => {
+        const newZxc = new XMLHttpRequest();
+        newZxc.open('GET', `https://restcountries.com/v3.1/alpha/${code}`);
+
+        newZxc.onload = function () {
+        if (newZxc.status === 200) {
+        const data = JSON.parse(newZxc.response)[0];
+        const countryName = data.name.common;
+        bordersFull.push(countryName);
+        
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a')
+        li.appendChild(a)
+        a.textContent = countryName
+        a.href = `country.html?name=${encodeURIComponent(countryName)}`;
+        document.getElementById('borders-list').appendChild(li);
+        }
+        };
+
+        newZxc.send();
+        });
+        }
+
 
         container.innerHTML = `
           <h2>${name}</h2>
           <p><span class="label">Столица:</span> ${capital}</p>
           <p><span class="label">Коды валют:</span> ${currencies}</p>
-          <p><span class="label">Коды граничащих стран:</span> ${borders}</p>
+          <p><span class="label">Граничующие страны</span>:</p>
+          <ul id="borders-list">${borders ? '' : '<li>Нет данных</li>'}</ul>
         `;
       } else {
         container.textContent = "Нету данных";
