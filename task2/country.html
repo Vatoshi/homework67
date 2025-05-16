@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Подробности о стране</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f2f5;
+    }
+
+    .country-info {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    a :hover {
+      background-color: rgb(88, 88, 88);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Подробная информация</h1>
+  <div id="countries-container" class="country-info">Загрузка...</div>
+  <a href="index.html" style="all: unset; padding: 5px 10px; border: 1px solid black; margin-top: 30px;">Главная</a>
+  <script>
+    const container = document.getElementById("countries-container");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const param = urlParams.get("name");
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `https://restcountries.com/v3.1/name/${encodeURIComponent(param)}?fullText=true`);
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        const data = JSON.parse(xhr.response)[0];
+
+        const name = data.name.common;
+        const capital = data.capital ? data.capital[0] : 'Нет данных';
+        const currencies = data.currencies ? Object.keys(data.currencies).join(', ') : 'Нет данных';
+        const borders = data.borders ? data.borders.join(', ') : 'Нет данных';
+
+        container.innerHTML = `
+          <h2>${name}</h2>
+          <p><span class="label">Столица:</span> ${capital}</p>
+          <p><span class="label">Коды валют:</span> ${currencies}</p>
+          <p><span class="label">Коды граничащих стран:</span> ${borders}</p>
+        `;
+      } else {
+        container.textContent = "Нету данных";
+      }
+    };
+
+    xhr.send();
+  </script>
+</body>
+
+</html>

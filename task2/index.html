@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Список стран</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .country-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .country-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .details-link {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+
+        .details-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Список стран</h1>
+    <div id="countries-container"></div>
+
+    <script>
+        const container = document.getElementById('countries-container');
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                const countries = JSON.parse(xhr.response);
+                container.innerHTML = '';
+                countries.forEach(country => {
+                    const name = country.name.common;
+                    const item = document.createElement('div');
+                    item.className = 'country-item';
+                    const countryName = document.createElement('span');
+                    countryName.className = 'country-name';
+                    countryName.textContent = name;
+                    const btn = document.createElement('a');
+                    btn.className = 'details-link';
+                    btn.textContent = "Подробнее";
+                    btn.href = `country.html?name=${encodeURIComponent(name)}`;
+                    item.appendChild(countryName);
+                    item.appendChild(btn);
+                    container.appendChild(item);
+                });
+            } else {
+                container.textContent = 'Ошибка загрузки стран.';
+            }
+        };
+
+        xhr.open('GET', 'https://restcountries.com/v3.1/all');
+        xhr.send();
+    </script>
+</body>
+
+</html>

@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+    .notif {
+        margin: 0 auto;
+        width: 300px;
+        height: 100px;
+        border: 1px solid black;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .notif button {
+        text-align: center;
+    }
+</style>
 <body>
     <div id="container">
         <input id="add-item-btn" type="button" value="+">
@@ -12,6 +26,7 @@
     <script>
         let a = document.getElementById("container")
         let activeNotif = false
+        
         a.onclick = function() {
             notification();
         }
@@ -20,9 +35,11 @@
             if(activeNotif) return
             activeNotif = true 
            const notif = document.createElement("div")
+           notif.classList.add("notif")
            notif.textContent = "уведомление с любым текстом"; 
            const btn = document.createElement("button")
            btn.textContent = "Закрыть";
+           notif.appendChild(document.createElement("br"))
            notif.appendChild(btn)
            a.appendChild(notif)
            
